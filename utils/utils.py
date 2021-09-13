@@ -42,5 +42,7 @@ def get_lr(optimizer):
 
 
 def preprocess_input(image):
-    image /= 255.0
+    image /= 7800.0
+    image[image < 0] = 0
+    image = np.array([image, image, image])
     return image

@@ -35,7 +35,7 @@ class UnetDataset(Dataset):
         # -------------------------------#
         jpg, png = self.get_train(jpg, png, self.input_shape, random=self.train)
 
-        jpg = np.transpose(preprocess_input(np.array(jpg, np.float64)), [2, 0, 1])
+        jpg = preprocess_input(np.array(jpg, np.float64))
         png = np.array(png)
         png[png >= self.num_classes] = self.num_classes
         # -------------------------------------------------------#
@@ -62,7 +62,8 @@ class UnetDataset(Dataset):
             nh = int(ih * scale)
 
             image = image.resize((nw, nh), Image.BICUBIC)
-            return image
+            label = label.resize((nw,nh), Image.NEAREST)
+            return image, label
         # resize image
         rand_jit1 = self.rand(1 - jitter, 1 + jitter)
         rand_jit2 = self.rand(1 - jitter, 1 + jitter)
@@ -112,7 +113,7 @@ class UnetDataset(Dataset):
 
 
 # DataLoader中collate_fn使用
-def deeplab_dataset_collate(batch):
+def unet_dataset_collate(batch):
     images = []
     pngs = []
     seg_labels = []
@@ -124,3 +125,4 @@ def deeplab_dataset_collate(batch):
     pngs = np.array(pngs)
     seg_labels = np.array(seg_labels)
     return images, pngs, seg_labels
+    pass

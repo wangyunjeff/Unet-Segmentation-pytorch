@@ -1,7 +1,7 @@
 import torch
 from tqdm import tqdm
 
-from layers.unet_training import CE_Loss, Dice_loss
+from utils.model_training import CE_Loss, Dice_loss
 from utils.utils import get_lr
 from utils.utils_metrics import f_score
 
@@ -21,7 +21,7 @@ def do_train(model, loss_history, optimizer, epoch, epoch_step, epoch_step_val, 
         for iteration, batch in enumerate(gen):
             if iteration >= epoch_step:
                 break
-            mgs, pngs, labels = batch
+            imgs, pngs, labels = batch
             with torch.no_grad():
                 imgs = torch.from_numpy(imgs).type(torch.FloatTensor)
                 pngs = torch.from_numpy(pngs).long()
@@ -92,5 +92,5 @@ def do_train(model, loss_history, optimizer, epoch, epoch_step, epoch_step_val, 
     print('Epoch:' + str(epoch + 1) + '/' + str(Epoch))
     print('Total Loss: %.3f || Val Loss: %.3f ' % (
     total_loss / (epoch_step + 1), val_loss / (epoch_step_val + 1)))
-    torch.save(model.state_dict(), 'logs/ep%03d-loss%.3f-val_loss%.3f.pth' % (
+    torch.save(model.state_dict(), 'weights/ep%03d-loss%.3f-val_loss%.3f.pth' % (
         (epoch + 1), total_loss / (epoch_step + 1), val_loss / (epoch_step_val + 1)))

@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 from modeling.vgg import VGG16
-from layers.unet_training import unetUp
+from layers.unet_layer import unetUp
 
 
 class Unet(nn.Module):
